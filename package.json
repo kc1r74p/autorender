@@ -1,0 +1,21 @@
+{
+  "name": "auto_render",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@ffprobe-installer/ffprobe": "^1.0.12",
+    "canvas": "^2.6.1",
+    "ffprobe-client": "^1.1.6",
+    "fluent-ffmpeg": "^2.1.2",
+    "gopro-telemetry": "^0.6.54",
+    "moment": "^2.24.0"
+  }
+}
