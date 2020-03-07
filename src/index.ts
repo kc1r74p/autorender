@@ -413,6 +413,7 @@ async function load() {
 
     const inDir = __dirname + '/in/';
     const outDir = __dirname + '/out/';
+    const renderOutDir = __dirname + '/final/';
     const readdir = util.promisify(fs.readdir) as any;
 
     await readdir(inDir, async (err: any, files: any[]) => {
@@ -443,7 +444,7 @@ async function load() {
             return x;
         });
 
-        await concatVideos(outDir, outDir, fileArr, start);
+        await concatVideos(outDir, renderOutDir, fileArr, start);
 
         console.log('END: ' + moment().toISOString());
         const duration = moment.utc(moment().diff(moment(startTime, 'HH:mm:ss'))).format('HH:mm:ss');
