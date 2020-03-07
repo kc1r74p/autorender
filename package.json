@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "tsc && node dist/app.js",
+    "debug": "tsc && node --nolazy --inspect-brk=9229 dist/app.js"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +20,11 @@
     "fluent-ffmpeg": "^2.1.2",
     "gopro-telemetry": "^0.6.54",
     "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.14",
+    "@types/moment": "^2.13.0",
+    "@types/node": "*",
+    "typescript": "*"
   }
 }
