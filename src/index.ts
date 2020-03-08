@@ -300,7 +300,7 @@ function pad(num: number, size: number) {
 }
 
 async function renderSample(frame: number, sample: any, video: any, rawName: string, fullTrack: any[]) {
-    const date = moment(sample.date).format('YYYY-MM-DD HH:mm:ss');
+    const date = moment.utc(sample.date).format('YYYY-MM-DD HH:mm:ss');
     const [lat, long, hgt, spd, inc] = sample.value;
     const spdKMH = (spd * 3.6).toFixed(2) + ' km/h';
     let dist = await getTrackLen(fullTrack, sample);
