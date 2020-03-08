@@ -418,6 +418,7 @@ async function load() {
 
     await readdir(inDir, async (err: any, files: any[]) => {
         let fileArr = files.filter((x) => x.toLowerCase().includes('.mp4'));
+        console.log('Files for one track: ' + fileArr.join(','));
 
         const trk = await getCompleteTrack(inDir, fileArr);
         const tl = await getTrackLen(trk);
