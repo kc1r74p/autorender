@@ -415,8 +415,10 @@ async function load() {
     const outDir = __dirname + '/out/';
     const renderOutDir = __dirname + '/final/';
     const readdir = util.promisify(fs.readdir) as any;
+    console.log('inDir: ' + inDir);
 
     await readdir(inDir, async (err: any, files: any[]) => {
+        console.log('All files: ' + files.join(','));
         let fileArr = files.filter((x) => x.toLowerCase().includes('.mp4'));
         console.log('Files for one track: ' + fileArr.join(','));
 
