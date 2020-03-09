@@ -6,7 +6,7 @@ const ffprobe = require('ffprobe-client');
 import ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs';
 const goproTelemetry = require('gopro-telemetry');
-import moment from 'moment';
+import moment from 'moment-timezone';
 import * as path from 'path';
 import tzlookup from 'tz-lookup';
 import * as util from 'util';
