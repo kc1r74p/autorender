@@ -8,6 +8,7 @@ import * as fs from 'fs';
 const goproTelemetry = require('gopro-telemetry');
 import moment from 'moment';
 import * as path from 'path';
+import tzlookup from 'tz-lookup';
 import * as util from 'util';
 
 // setup env
@@ -15,6 +16,7 @@ process.env.FFPROBE_PATH = ffprobeInstaller.path;
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const overlayFPS = 2;
+const globalTZ = 'Europe/Berlin';
 
 const extractGPMF = async (videoFile: any) => {
     const ffData = await ffprobe(videoFile);
@@ -300,11 +302,12 @@ function pad(num: number, size: number) {
 }
 
 async function renderSample(frame: number, sample: any, video: any, rawName: string, fullTrack: any[]) {
-    const date = moment.utc(sample.date).format('YYYY-MM-DD HH:mm:ss');
     const [lat, long, hgt, spd, inc] = sample.value;
     const spdKMH = (spd * 3.6).toFixed(2) + ' km/h';
     let dist = await getTrackLen(fullTrack, sample);
     dist = dist.toFixed(3) + 'km';
+
+    const date = moment.utc(sample.date).tz(tzlookup(lat, long) || globalTZ).format('YYYY-MM-DD HH:mm:ss');
 
     const canvas = createCanvas(video.width, video.height);
     const ctx = canvas.getContext('2d');

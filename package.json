@@ -19,12 +19,15 @@
     "ffprobe-client": "^1.1.6",
     "fluent-ffmpeg": "^2.1.2",
     "gopro-telemetry": "^0.6.54",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.14",
     "@types/moment": "^2.13.0",
+    "@types/moment-timezone": "^0.5.12",
     "@types/node": "*",
+    "@types/tz-lookup": "^6.1.0",
     "typescript": "*"
   }
 }
