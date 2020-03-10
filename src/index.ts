@@ -429,7 +429,7 @@ async function load() {
         const tl = await getTrackLen(trk);
         console.log('Track length: ' + tl.toFixed(3) + 'km');
 
-        const start = await getStartDate(inDir, files);
+        const start = await getStartDate(inDir, fileArr);
         console.log('Track start: ' + start.toISOString());
 
         await asyncForEach(fileArr, async (file: string) => {
