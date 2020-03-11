@@ -31,7 +31,7 @@ const extractGPMF = async (videoFile: any) => {
 const extractGPMFAt = async (videoFile: any, stream: number) => {
     let rawData = Buffer.alloc(0);
     await new Promise((resolve) => {
-            ffmpeg(videoFile)
+        ffmpeg(videoFile)
             .outputOption('-y')
             .outputOptions('-codec copy')
             .outputOptions(`-map 0:${stream}`)
@@ -46,12 +46,9 @@ const extractGPMFAt = async (videoFile: any, stream: number) => {
 
 function getSamplefromTime(time: moment.Moment, samples: any[]) {
     const searchFor = time.valueOf();
-    // console.log("search: " + searchFor);
     const closest = samples.reduce((prev, curr) => {
         if (!curr || !curr.date) { return; }
         if (!prev) { return curr; }
-        //   console.log("curr: " + moment(curr.date).valueOf());
-        //  console.log("prev: " + moment(prev.date).valueOf());
         return (Math.abs(moment(curr.date).valueOf() - searchFor)
             < Math.abs(moment(prev.date).valueOf() - searchFor)
             ? curr : prev);
@@ -83,18 +80,9 @@ function drawRoute(x: number, y: number, w: number, h: number, ctx: any, data: a
         let yy = (lat - boundingRect.y) / boundingRect.height * h;
         yy *= -1;
         yy += h;
-
         xx += x;
         yy += y;
         ctx.fillRect(xx, yy, 1, 1);
-
-        /*
-        if (value === data[0].value) {
-            ctx.fillText("Start", xx - 1, yy - 1);
-        }
-        if (value === data.slice(-1)[0].value) {
-            ctx.fillText("End", xx - 1, yy - 1);
-        }*/
     }
 }
 
@@ -107,14 +95,6 @@ function drawRoutePosition(x: number, y: number, w: number, h: number, ctx: any,
 
     xx += x;
     yy += y;
-
-    // rect
-    // ctx.fillRect(xx-2, yy-2, 4, 4);
-
-    // dot
-    // ctx.beginPath();
-    // ctx.arc(xx, yy, 3, 0, 2 * Math.PI);
-    // ctx.fill();
 
     // track crosshair
     ctx.fillRect(xx, y + 0, 1, h);
@@ -199,7 +179,7 @@ async function getStartDate(inDir: string, files: any[]) {
     return min;
 }
 
-async function getTrackLen(track: any[], until?: any) {
+function getTrackLen(track: any[], until?: any) {
     // calc dist total
     const trackLength = track.slice(0).reduce((len, pnt, idx, arr) => {
         if (idx < 1) { return 0; }
@@ -216,9 +196,7 @@ async function getTrackLen(track: any[], until?: any) {
         }
         return ll;
     }, track.slice(-1)[0]);
-
     return trackLength;
-    // console.log("Collected track: " + trackLength.toFixed(2) + "km");
 }
 
 async function renderFullTrack(ctx: any, x: number, y: number, w: number, h: number, fullTrack: any) {
@@ -304,7 +282,7 @@ function pad(num: number, size: number) {
 async function renderSample(frame: number, sample: any, video: any, rawName: string, fullTrack: any[]) {
     const [lat, long, hgt, spd, inc] = sample.value;
     const spdKMH = (spd * 3.6).toFixed(2) + ' km/h';
-    let dist = await getTrackLen(fullTrack, sample);
+    let dist = getTrackLen(fullTrack, sample);
     dist = dist.toFixed(3) + 'km';
 
     const date = moment.utc(sample.date).tz(tzlookup(lat, long) || globalTZ).format('YYYY-MM-DD HH:mm:ss');
@@ -425,32 +403,44 @@ async function load() {
         let fileArr = files.filter((x) => x.toLowerCase().includes('.mp4'));
         console.log('Files for one track: ' + fileArr.join(','));
 
-        const trk = await getCompleteTrack(inDir, fileArr);
-        const tl = await getTrackLen(trk);
+        // collect track metadata over all files
+        const [cTrack, startDate] = await Promise.all([
+            await getCompleteTrack(inDir, fileArr),
+            await getStartDate(inDir, fileArr),
+        ]);
+
+        const tl = getTrackLen(cTrack);
         console.log('Track length: ' + tl.toFixed(3) + 'km');
+        console.log('Track start: ' + startDate.toISOString());
+        console.log('----------------------------');
 
-        const start = await getStartDate(inDir, fileArr);
-        console.log('Track start: ' + start.toISOString());
-
+        const videoHandlers: [Promise<void>] = [Promise.resolve()];
         await asyncForEach(fileArr, async (file: string) => {
-            await handleVideo(inDir + file, trk);
+            videoHandlers.push(handleVideo(inDir + file, cTrack));
         });
 
+        // render overlay images in parallel
+        await Promise.all(videoHandlers);
+
+        console.log('----------------------------');
         console.log('Overlay frames done');
-        console.log('Proceeding with overlaying');
+        console.log('Proceeding with overlaying over raws');
 
         await asyncForEach(fileArr, async (file: string) => {
             console.log('Starting: ' + file);
             await renderOverlayedPart(inDir, outDir, file);
             console.log('Done: ' + file);
+            console.log('----------------------------');
         });
 
+        // build out files from above, TODO: return out files above instead of this "logic"
         fileArr = fileArr.map((x) => {
             x = 'rendered_' + x;
             return x;
         });
 
-        await concatVideos(outDir, renderOutDir, fileArr, start);
+        // render final file by concatinating all rendered parts of track
+        await concatVideos(outDir, renderOutDir, fileArr, startDate);
 
         console.log('END: ' + moment().toISOString());
         const duration = moment.utc(moment().diff(moment(startTime, 'HH:mm:ss'))).format('HH:mm:ss');
