@@ -260,15 +260,18 @@ async function handleVideo(file: string, fullTrack: any) {
     console.log('Collected target frames: ' + renderList.length);
     console.log('Beginning frame rendering...');
 
+    // uhh
     if (!fs.existsSync(__dirname + '/out/' + rawName)) {
         fs.mkdirSync(__dirname + '/out/' + rawName);
     }
 
-    // RENDER LOOP - current setup 1 frame per 1 sec -> static FPS
+    // RENDER LOOP
+    const imageHandlers: [Promise<void>] = [Promise.resolve()];
     for (let i = 0; i < renderList.length; i++) {
-        const s = renderList[i];
-        await renderSample(i, s, vid, rawName, fullTrack);
+        const trackInfo = renderList[i];
+        imageHandlers.push(renderSample(i, trackInfo, vid, rawName, fullTrack));
     }
+    await Promise.all(imageHandlers);
 
     console.log('Rendered overlay frames for file: ' + rawName);
 }
@@ -293,6 +296,8 @@ async function renderSample(frame: number, sample: any, video: any, rawName: str
     ctx.fillStyle = 'white';
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 1;
+
+    // TODO: scale all by res / settings
     ctx.font = '30px Arial';
 
     // date time
@@ -313,7 +318,7 @@ async function renderSample(frame: number, sample: any, video: any, rawName: str
     ctx.fillText(dist, 50, video.height - 50);
     ctx.strokeText(dist, 50, video.height - 50);
 
-    // minimap
+    // minimap - has more or less scaling
     const { x, y, w, h } = {
         h: (video.width * 0.15) / 2,
         w: (video.width * 0.15),
