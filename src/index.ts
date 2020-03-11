@@ -324,8 +324,8 @@ async function renderSample(frame: number, sample: any, video: any, rawName: str
     // lat long
     ctx.fillText(lat, 50, video.height - 100);
     ctx.strokeText(lat, 50, video.height - 100);
-    ctx.fillText(long, 230, video.height - 100);
-    ctx.strokeText(long, 230, video.height - 100);
+    ctx.fillText(long, 240, video.height - 100);
+    ctx.strokeText(long, 240, video.height - 100);
 
     // spd
     ctx.fillText(spdKMH, 50, video.height - 150);
