@@ -266,12 +266,13 @@ async function handleVideo(file: string, fullTrack: any) {
     }
 
     // RENDER LOOP
-    const imageHandlers: [Promise<void>] = [Promise.resolve()];
     for (let i = 0; i < renderList.length; i++) {
         const trackInfo = renderList[i];
-        imageHandlers.push(renderSample(i, trackInfo, vid, rawName, fullTrack));
+        await renderSample(i, trackInfo, vid, rawName, fullTrack);
+        if ( Math.round(i / renderList.length * 100) % 10 === 0) {
+            console.log(rawName + ': Frame render [' + Math.round(i / renderList.length * 100) + '%]');
+        }
     }
-    await Promise.all(imageHandlers);
 
     console.log('Rendered overlay frames for file: ' + rawName);
 }
