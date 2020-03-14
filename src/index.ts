@@ -183,6 +183,7 @@ function getTrackLen(track: any[], until?: any) {
     // calc dist total
     const trackLength = track.slice(0).reduce((len, pnt, idx, arr) => {
         if (idx < 1) { return 0; }
+        if (!pnt?.value) { return len; }
         const prevPnt = arr[idx - 1];
         const [lat1, long1, hgt1, spd1, inc1] = prevPnt.value;
         const [lat2, long2, hgt2, spd2, inc2] = pnt.value;
@@ -269,7 +270,7 @@ async function handleVideo(file: string, fullTrack: any) {
     for (let i = 0; i < renderList.length; i++) {
         const trackInfo = renderList[i];
         await renderSample(i, trackInfo, vid, rawName, fullTrack);
-        if ( Math.round(i / renderList.length * 100) % 10 === 0) {
+        if (Math.round(i / renderList.length * 100) % 10 === 0) {
             console.log(rawName + ': Frame render [' + Math.round(i / renderList.length * 100) + '%]');
         }
     }
