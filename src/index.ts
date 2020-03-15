@@ -185,11 +185,13 @@ function getTrackLen(track: any[], until?: any) {
         if (idx < 1) { return 0; }
         if (!pnt?.value) { return len; }
         const prevPnt = arr[idx - 1];
+        if (!prevPnt?.value) { return len; }
         const [lat1, long1, hgt1, spd1, inc1] = prevPnt.value;
         const [lat2, long2, hgt2, spd2, inc2] = pnt.value;
         const ll = len + distance(lat1, long1, lat2, long2, 'K');
         // early exit
         if (until) {
+            if (!until?.value) { return ll; }
             const [lat3, long3, hgt3, spd3, inc3] = until.value;
             if (lat1 === lat3 && long1 === long3) {
                 arr.splice(1);
