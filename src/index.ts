@@ -56,13 +56,16 @@ function getSamplefromTime(time: moment.Moment, samples: any[]) {
     return closest;
 }
 
+let lastValidBound: any = null;
 function getBoundingRect(data: any) {
     let left = Infinity;
     let right = -Infinity;
     let top = Infinity;
     let bottom = -Infinity;
 
-    for (const { value } of data) {
+    for (let { value } of data) {
+        if (value) { lastValidBound = value; }
+        if (!value) { value = lastValidBound; }
         const [lat, long, hgt, spd, inc] = value;
         if (left > long) { left = long; }
         if (top > lat) { top = lat; }
@@ -72,9 +75,12 @@ function getBoundingRect(data: any) {
     return { x: left, y: top, width: right - left, height: bottom - top };
 }
 
+let lastValidRoute: any = null;
 function drawRoute(x: number, y: number, w: number, h: number, ctx: any, data: any) {
     const boundingRect = getBoundingRect(data);
-    for (const { value } of data) {
+    for (let { value } of data) {
+        if (value) { lastValidRoute = value; }
+        if (!value) { value = lastValidRoute; }
         const [lat, long, hgt, spd, inc] = value;
         let xx = (long - boundingRect.x) / boundingRect.width * w;
         let yy = (lat - boundingRect.y) / boundingRect.height * h;
@@ -181,17 +187,19 @@ async function getStartDate(inDir: string, files: any[]) {
 
 function getTrackLen(track: any[], until?: any) {
     // calc dist total
+    let lastValid: any = null;
     const trackLength = track.slice(0).reduce((len, pnt, idx, arr) => {
         if (idx < 1) { return 0; }
-        if (!pnt?.value) { return len; }
-        const prevPnt = arr[idx - 1];
-        if (!prevPnt?.value) { return len; }
+        if (lastValid && pnt?.value) { lastValid = pnt; }
+        if (!pnt?.value) { pnt = lastValid; }
+        let prevPnt = arr[idx - 1];
+        if (!prevPnt?.value) { prevPnt = lastValid; }
+        if (!pnt || !prevPnt) { return len; }
         const [lat1, long1, hgt1, spd1, inc1] = prevPnt.value;
         const [lat2, long2, hgt2, spd2, inc2] = pnt.value;
         const ll = len + distance(lat1, long1, lat2, long2, 'K');
         // early exit
         if (until) {
-            if (!until?.value) { return ll; }
             const [lat3, long3, hgt3, spd3, inc3] = until.value;
             if (lat1 === lat3 && long1 === long3) {
                 arr.splice(1);
