@@ -7,6 +7,7 @@
 
 #### Options/Features:
 * Overlay frame rate can be changed - Default 2 FPS
+* Lat/Long auto detect timezone for overlay
 * Custom data can be rendered on a per frame basis
 * utilizing nodejs-canvas and ffmpeg for most parts
 * small codebase
