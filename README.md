@@ -31,6 +31,7 @@
 * Each overlay frame gets rendered on the disk, this is required for ffmpeg but may be improved
 * Concat and overlay apply can be proccessed by ffmpeg in one command to save render time instead of seperated runs
 * Typings incomplete, some deps also untyped
+* Where are the tests at ?
 * Clunky logging, file path construction, ...
 
 #### Frame example (real input would be gopro mp4 and output would also be a mp4 file):
