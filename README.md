@@ -17,6 +17,7 @@
 * As seen below gradient color overlay is applied for alpha area for the full height+width (to be investigated)
 * Each overlay frame gets rendered on the disk, this is required for ffmpeg but may be improved
 * Concat and overlay apply can be proccessed by ffmpeg in one command to save render time instead of seperated runs
+* Typings incomplete, some deps also untyped
 
 #### Example:
 ###### Input frame
