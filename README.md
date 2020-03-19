@@ -19,7 +19,7 @@
 * Concat and overlay apply can be proccessed by ffmpeg in one command to save render time instead of seperated runs
 * Typings incomplete, some deps also untyped
 
-#### Example:
+#### Frame example (real input would be gopro mp4 and output would also be a mp4 file):
 ###### Input frame
 ![Input frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/org.png "Input frame")
 
