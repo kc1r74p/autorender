@@ -10,6 +10,7 @@
 * Custom data can be rendered on a per frame basis
 * utilizing nodejs-canvas and ffmpeg for most parts
 * small codebase
+* can be used in a CI/CD for auto ingressing of new files
 
 #### Known issues:
 * As seen below gradient color overlay is applied for alpha area for the full height+width (to be investigated)
