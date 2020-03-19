@@ -23,3 +23,9 @@
 
 ###### Output frame (Lat/Long removed)
 ![Result frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/overlay.png "Result frame")
+
+#### Credits/Mentions
+* gopro-telemetry which allows extraction of gopro data from video https://github.com/JuanIrache/gopro-telemetry
+* ffmpeg packages which make it possible to do all required rendering work right out of nodejs
+* canvas via nodejs which makes rendering an easy task while staying on server side
+
