@@ -13,6 +13,19 @@
 * small codebase
 * can be used in a CI/CD for auto ingressing of new files
 
+#### How to build
+* Clone
+* `npm i`
+* `npm run build`
+
+#### How to run
+* Create following folders: **in**, **out**, **final** in the dist folder after the build
+* Copy your *.mp4* parts into the **in** directory
+* Run `npm start` in the main app dir
+* Logging will tell when it is done **(or when your CPU fan stops going haywire)**
+* In the **final** directory you will find the result video
+* The **out** dir is used as temp location for overlay and parts and should be cleaned after each run
+
 #### Known issues:
 * As seen below gradient color overlay is applied for alpha area for the full height+width (to be investigated)
 * Each overlay frame gets rendered on the disk, this is required for ffmpeg but may be improved
