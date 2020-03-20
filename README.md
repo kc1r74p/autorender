@@ -13,12 +13,12 @@
 * small codebase
 * can be used in a CI/CD for auto ingressing of new files
 
-#### How to build
+#### How to build:
 * Clone
 * `npm i`
 * `npm run build`
 
-#### How to run
+#### How to run:
 * Create following folders: **in**, **out**, **final** in the dist folder after the build
 * Copy your *.mp4* parts into the **in** directory
 * Run `npm start` in the main app dir
@@ -41,7 +41,7 @@
 ###### Output frame (Lat/Long removed)
 ![Result frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/overlay.png "Result frame")
 
-#### Credits/Mentions
+#### Credits/Mentions:
 * gopro-telemetry which allows extraction of gopro data from video https://github.com/JuanIrache/gopro-telemetry
 * ffmpeg packages which make it possible to do all required rendering work right out of nodejs
 * canvas via nodejs which makes rendering an easy task while staying on server side
