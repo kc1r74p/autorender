@@ -18,7 +18,7 @@
     "canvas": "^2.6.1",
     "ffprobe-client": "^1.1.6",
     "fluent-ffmpeg": "^2.1.2",
-    "gopro-telemetry": "^0.6.54",
+    "gopro-telemetry": "^0.6.56",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
     "tz-lookup": "^6.1.25"
@@ -27,7 +27,7 @@
     "@types/fluent-ffmpeg": "^2.1.14",
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.12",
-    "@types/node": "*",
+    "@types/node": "^13.9.2",
     "@types/tz-lookup": "^6.1.0",
     "typescript": "*"
   }
