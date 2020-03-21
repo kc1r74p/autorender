@@ -1,11 +1,10 @@
-// tslint:disable: no-var-requires
-const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
-const ffprobeInstaller = require('@ffprobe-installer/ffprobe');
+import * as ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
+import * as ffprobeInstaller from '@ffprobe-installer/ffprobe';
 import { createCanvas } from 'canvas';
-const ffprobe = require('ffprobe-client');
+import ffprobe from 'ffprobe-client';
 import ffmpeg from 'fluent-ffmpeg';
 import * as fs from 'fs';
-const goproTelemetry = require('gopro-telemetry');
+import goproTelemetry from 'gopro-telemetry';
 import moment from 'moment-timezone';
 import * as path from 'path';
 import tzlookup from 'tz-lookup';
@@ -25,7 +24,6 @@ const extractGPMF = async (videoFile: any) => {
             return [await extractGPMFAt(videoFile, i), ffData];
         }
     }
-    // tslint:disable-next-line: no-console
     console.error('[Invalid file] No data stream (gpmd) found in: ' + videoFile);
     return [null, null];
 };
@@ -233,7 +231,6 @@ async function handleVideo(file: string, fullTrack: any) {
     const [raw, ffData]: any = await extractGPMF(file);
     if (!raw) { return; }
     const vid = ffData.streams.filter((s: any) => s.codec_type === 'video')[0];
-    // tslint:disable: no-console
     console.log('File: ' + rawName);
     console.log('Size: ' + Math.round(ffData.format.size / 1024 / 1024) + 'MiB');
     console.log('Created: ' + ffData.format.tags.creation_time);
@@ -250,13 +247,11 @@ async function handleVideo(file: string, fullTrack: any) {
     const data = goproTelemetry({ rawData: raw });
     const key = Object.keys(data).filter((x) => data[x].streams && data[x].streams.GPS5)[0];
     const zeroMark = moment(data[key].streams.GPS5.samples.slice(0, 1)[0].date);
-    const renderList = [];
+    const renderList: any[] = [];
 
     // SAMPLE FETCH LOOP
     for (let i = 0; i < frames; i++) {
-
         if (i % Math.round(60 / overlayFPS) !== 0) { continue; }
-
         const timeMS = (1000 / 60 * i);
         const timeTotal = moment(zeroMark).add(timeMS, 'milliseconds');
         const sample = getSamplefromTime(timeTotal, data[key].streams.GPS5.samples);
@@ -264,13 +259,7 @@ async function handleVideo(file: string, fullTrack: any) {
         if (i % Math.trunc(frames / 100) === 0) {
             console.log(rawName + ': [' + Math.round(i / frames * 100) + '%] TrgTime: ' + timeTotal.toISOString());
         }
-        // console.log(Math.round(i / frames * 100) + "%] Fr: " + i + " MS: " + Math.round(timeMS) +
-        // " TrgTime: " + timeTotal.toISOString() + " found match at: " + moment(sample.date).toISOString());
-
-        // 2frame per sec for now .... to be fixed to have dynamic frames ...
-        // if (i % Math.round(60 / overlayFPS) === 0) {
         renderList.push(sample);
-        //  }
     }
 
     console.log('Collected target frames: ' + renderList.length);
@@ -285,7 +274,7 @@ async function handleVideo(file: string, fullTrack: any) {
     for (let i = 0; i < renderList.length; i++) {
         const trackInfo = renderList[i];
         await renderSample(i, trackInfo, vid, rawName, fullTrack);
-        if (Math.round(i / renderList.length * 100) % 10 === 0) {
+        if ((i / renderList.length * 100) % 10 === 0) {
             console.log(rawName + ': Frame render [' + Math.round(i / renderList.length * 100) + '%]');
         }
     }
@@ -400,7 +389,7 @@ async function concatVideos(inDir: string, outDir: string, files: string[], date
             .on('error', reject)
             .on('progress', (progress) => {
                 const tm = moment(progress.timemark, 'HH:mm:ss.SS').valueOf();
-                if (tm % 1000 === 0) {
+                if (Math.round(tm / 100) % 10 === 0) {
                     console.log('Concat processing: ' + progress.timemark);
                 }
             });
