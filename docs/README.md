@@ -1,5 +1,11 @@
 # Autorender
 
+#### Frame example
+Input frame                   |  Output frame
+:----------------------------:|:----------------------------:
+![Input frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/org.png "Input frame") | ![Result frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/overlay.png "Result frame")
+
+
 1. Takes gopro hero *.mp4 parts
 2. renders overlay metadata, which is taken from .mp4 stream (gps track, spd, time, lat, long, distance)
 3. renders overlays over parts
@@ -14,7 +20,7 @@
 * can be used in a CI/CD for auto ingressing of new files
 
 #### How to build:
-* Clone
+* `git clone https://github.com/kc1r74p/autorender.git`
 * `npm i`
 * `npm run build`
 
@@ -32,13 +38,6 @@
 * Typings incomplete
 * Where are the tests at ?
 * Clunky logging, file path construction, ...
-
-#### Frame example (real input would be gopro mp4 and output would also be a mp4 file):
-###### Input frame
-![Input frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/org.png "Input frame")
-
-###### Output frame (Lat/Long removed)
-![Result frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/overlay.png "Result frame")
 
 #### Credits/Mentions:
 * gopro-telemetry which allows extraction of gopro data from video https://github.com/JuanIrache/gopro-telemetry
