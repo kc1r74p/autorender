@@ -25,7 +25,9 @@ const extractGPMF = async (videoFile: any) => {
             return [await extractGPMFAt(videoFile, i), ffData];
         }
     }
-    return null;
+    // tslint:disable-next-line: no-console
+    console.error('[Invalid file] No data stream (gpmd) found in: ' + videoFile);
+    return [null, null];
 };
 
 const extractGPMFAt = async (videoFile: any, stream: number) => {
@@ -168,6 +170,7 @@ async function getCompleteTrack(inDir: string, files: any[]) {
     const track = await files.reduce(async (prevTrack, f) => {
         const ctrack = await prevTrack;
         const [raw, ffData]: any = await extractGPMF(inDir + f);
+        if (!raw) { return ctrack; }
         const data = await goproTelemetry({ rawData: raw });
         const key = Object.keys(data).filter((x) => data[x].streams && data[x].streams.GPS5)[0];
         ctrack.push(...data[key].streams.GPS5.samples);
@@ -180,6 +183,7 @@ async function getStartDate(inDir: string, files: any[]) {
     const min = await files.reduce(async (minP, f) => {
         const cmin = await minP;
         const [raw, ffData]: any = await extractGPMF(inDir + f);
+        if (!ffData) { return cmin; }
         return moment.min([cmin, moment.utc(ffData.format.tags.creation_time)]);
     }, Promise.resolve(moment.utc()));
     return min;
@@ -227,6 +231,7 @@ async function renderFullTrack(ctx: any, x: number, y: number, w: number, h: num
 async function handleVideo(file: string, fullTrack: any) {
     const rawName = path.basename(file);
     const [raw, ffData]: any = await extractGPMF(file);
+    if (!raw) { return; }
     const vid = ffData.streams.filter((s: any) => s.codec_type === 'video')[0];
     // tslint:disable: no-console
     console.log('File: ' + rawName);
@@ -360,6 +365,7 @@ async function asyncForEach(array: any, callback: any) {
 
 async function renderOverlayedPart(inDir: string, outDir: string, file: string) {
     return new Promise((resolve, reject) => {
+        // for testing add .addOption('-t 5') which will return a 5s video instead of whole duration
         const render = ffmpeg(inDir + file)
             .addInput(outDir + file + '/%04d.png')
             .inputFPS(overlayFPS)
@@ -369,18 +375,16 @@ async function renderOverlayedPart(inDir: string, outDir: string, file: string) 
                     input: '[0:v][1:v]',
                 },
             ] as any)
-            .addOption('-pix_fmt yuv420p')
             .addOption('-c:a copy')
             .on('end', resolve)
             .on('error', reject)
             .on('progress', (progress: { timemark: moment.MomentInput; }) => {
                 const tm = moment(progress.timemark, 'HH:mm:ss.SS').valueOf();
-                if (tm % 1000 === 0) {
+                if (Math.round(tm / 100) % 10 === 0) {
                     console.log(file + '] Processing: ' + progress.timemark);
                 }
             })
             .output(outDir + 'rendered_' + file);
-
         render.run();
     });
 }
