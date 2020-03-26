@@ -33,6 +33,7 @@ Input frame                   |  Output frame
 * The **out** dir is used as temp location for overlay and parts and should be cleaned after each run
 
 #### Known issues:
+* GPS Fix state not considered for track length or track rendering
 * Each overlay frame gets rendered on the disk, this is required for ffmpeg but may be improved
 * Concat and overlay apply can be proccessed by ffmpeg in one command to save render time instead of seperated runs
 * Typings incomplete
