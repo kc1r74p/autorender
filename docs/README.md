@@ -1,4 +1,6 @@
 # Autorender
+![1](https://img.shields.io/david/kc1r74p/autorender)
+![2](https://img.shields.io/github/languages/code-size/kc1r74p/autorender)
 
 #### Frame example
 Input frame                   |  Output frame
