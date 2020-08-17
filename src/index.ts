@@ -244,7 +244,7 @@ async function handleVideo(file: string, fullTrack: any) {
     console.log('Res: ' + vid.width + 'x' + vid.height + ' @ 60');
     console.log('---------------------');
 
-    const data = goproTelemetry({ rawData: raw });
+    const data = await goproTelemetry({ rawData: raw });
     const key = Object.keys(data).filter((x) => data[x].streams && data[x].streams.GPS5)[0];
     const zeroMark = moment(data[key].streams.GPS5.samples.slice(0, 1)[0].date);
     const renderList: any[] = [];
