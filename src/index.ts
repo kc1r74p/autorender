@@ -39,7 +39,8 @@ const extractGPMFAt = async (videoFile: any, stream: number) => {
             .pipe()
             .on('data', (chunk) => {
                 rawData = Buffer.concat([rawData, chunk]);
-            }).on('end', resolve);
+            })
+            .on('end', async () => {await sleep(100); return resolve()});
     });
     return rawData;
 };
@@ -107,6 +108,7 @@ function drawRoutePosition(x: number, y: number, w: number, h: number, ctx: any,
     ctx.fillRect(x + 0, yy, w, 1);
 }
 
+// SRC: https://www.geodatasource.com/developers/javascript
 function distance(lat1: number, lon1: number, lat2: number, lon2: number, unit: string) {
     if ((lat1 === lat2) && (lon1 === lon2)) {
         return 0;
@@ -162,6 +164,11 @@ function roundRect(ctx: any, x: any, y: any, width: any, height: any, radius: an
     if (stroke) {
         ctx.stroke();
     }
+}
+function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
 }
 
 async function getCompleteTrack(inDir: string, files: any[]) {
@@ -291,7 +298,7 @@ function pad(num: number, size: number) {
 async function renderSample(frame: number, sample: any, video: any, rawName: string, fullTrack: any[]) {
     const [lat, long, hgt, spd, inc] = sample.value;
     const spdKMH = (spd * 3.6).toFixed(2) + ' km/h';
-    let dist = getTrackLen(fullTrack, sample);
+    let dist = fullTrack ? getTrackLen(fullTrack, sample) : 0;
     dist = dist.toFixed(3) + 'km';
 
     const date = moment.utc(sample.date).tz(tzlookup(lat, long) || globalTZ).format('YYYY-MM-DD HH:mm:ss');
@@ -332,8 +339,10 @@ async function renderSample(frame: number, sample: any, video: any, rawName: str
         y: video.height - (video.width * 0.15) + (video.width * 0.15) / 2 - 20,
     };
 
-    renderFullTrack(ctx, x, y, w, h, fullTrack);
-    drawRoutePosition(x + 5, y + 5, w - 10, h - 10, ctx, fullTrack, lat, long);
+    if (fullTrack) {
+        renderFullTrack(ctx, x, y, w, h, fullTrack);
+        drawRoutePosition(x + 5, y + 5, w - 10, h - 10, ctx, fullTrack, lat, long);
+    }
 
     async function renderFrameFile(stream: any, iCanvas: any) {
         return new Promise((resolve) => {
@@ -416,7 +425,7 @@ async function load() {
         // collect track metadata over all files
         const [cTrack, startDate] = await Promise.all([
             await getCompleteTrack(inDir, fileArr),
-            await getStartDate(inDir, fileArr),
+            await getStartDate(inDir, fileArr)
         ]);
 
         const tl = getTrackLen(cTrack);
