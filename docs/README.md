@@ -1,4 +1,5 @@
 # Autorender
+![Build app](https://github.com/kc1r74p/autorender/workflows/Build%20app/badge.svg)
 ![1](https://img.shields.io/david/kc1r74p/autorender)
 ![2](https://img.shields.io/github/languages/code-size/kc1r74p/autorender)
 
