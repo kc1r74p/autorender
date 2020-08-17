@@ -13,6 +13,7 @@ jobs:
     container: ${{ matrix.container }}
     strategy:
       matrix:
+        node-version: [10.x, 12.x, 14.x]
         container: ['ubuntu:16.04', 'ubuntu:18.04']
 
     steps:
