@@ -8,13 +8,12 @@ on:
 
 jobs:
   build:
-    name: Build with ${{ matrix.node-version }} on ${{ matrix.container }}
-    runs-on: ubuntu-latest
-    container: ${{ matrix.container }}
+    name: Build with Node ${{ matrix.node-version }}
+    runs-on: windows-latest
+
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x]
-        container: ['ubuntu:16.04', 'ubuntu:18.04']
 
     steps:
     - uses: actions/checkout@v2
