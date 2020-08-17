@@ -438,7 +438,7 @@ async function load() {
 
         await asyncForEach(fileArr, async (file: string) => {
             console.log('Starting: ' + file);
-            //await renderOverlayedPart(inDir, outDir, file);
+            await renderOverlayedPart(inDir, outDir, file);
             console.log('Done: ' + file);
             console.log('----------------------------');
         });
