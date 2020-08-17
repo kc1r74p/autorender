@@ -438,7 +438,7 @@ async function load() {
 
         await asyncForEach(fileArr, async (file: string) => {
             console.log('Starting: ' + file);
-            await renderOverlayedPart(inDir, outDir, file);
+            //await renderOverlayedPart(inDir, outDir, file);
             console.log('Done: ' + file);
             console.log('----------------------------');
         });
@@ -450,7 +450,11 @@ async function load() {
         });
 
         // render final file by concatinating all rendered parts of track
-        await concatVideos(outDir, renderOutDir, fileArr, startDate);
+        if (fileArr.length > 1) {
+            await concatVideos(outDir, renderOutDir, fileArr, startDate);
+        } else {
+            fs.copyFileSync(outDir + fileArr[0], renderOutDir + startDate.format('YYYYMMDD_HHmmss') + '.mp4');
+        }
 
         console.log('END: ' + moment().toISOString());
         const duration = moment.utc(moment().diff(moment(startTime, 'HH:mm:ss'))).format('HH:mm:ss');
