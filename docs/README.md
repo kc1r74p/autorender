@@ -21,6 +21,7 @@ Input frame                   |  Output frame
 * utilizing nodejs-canvas and ffmpeg for most parts
 * small codebase
 * can be used in a CI/CD for auto ingressing of new files
+* if required this app can also be put into a docker container for removing setup steps
 
 #### How to build:
 * `git clone https://github.com/kc1r74p/autorender.git`
