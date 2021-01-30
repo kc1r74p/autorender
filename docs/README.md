@@ -3,7 +3,7 @@
 ![1](https://img.shields.io/david/kc1r74p/autorender)
 ![2](https://img.shields.io/github/languages/code-size/kc1r74p/autorender)
 
-#### Frame example
+#### Frame example - Output file is a video with the overlay rendered on top
 Input frame                   |  Output frame
 :----------------------------:|:----------------------------:
 ![Input frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/org.png "Input frame") | ![Result frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/overlay.png "Result frame")
@@ -12,7 +12,7 @@ Input frame                   |  Output frame
 1. Takes gopro hero *.mp4 parts
 2. renders overlay metadata, which is taken from .mp4 stream (gps track, spd, time, lat, long, distance)
 3. renders overlays over parts
-4. concats all parts to one track
+4. concats all parts to one track as .mp4
 
 #### Options/Features:
 * Overlay frame rate can be changed - Default 2 FPS
