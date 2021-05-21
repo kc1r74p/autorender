@@ -3,10 +3,7 @@
 ![1](https://img.shields.io/david/kc1r74p/autorender)
 ![2](https://img.shields.io/github/languages/code-size/kc1r74p/autorender)
 
-#### Frame example - Output file is a video with the overlay rendered on top
-Input frame                   |  Output frame
-:----------------------------:|:----------------------------:
-![Input frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/org.png "Input frame") | ![Result frame](https://raw.githubusercontent.com/kc1r74p/autorender/master/docs/overlay.png "Result frame")
+https://user-images.githubusercontent.com/7422353/119197643-5dfb4900-ba88-11eb-9579-da7cfbaeda07.mp4
 
 
 1. Takes gopro hero *.mp4 parts
