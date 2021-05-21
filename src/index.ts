@@ -40,7 +40,7 @@ const extractGPMFAt = async (videoFile: any, stream: number) => {
             .on('data', (chunk) => {
                 rawData = Buffer.concat([rawData, chunk]);
             })
-            .on('end', async () => {await sleep(100); return resolve()});
+            .on('end', async () => {await sleep(100); return resolve({})});
     });
     return rawData;
 };
