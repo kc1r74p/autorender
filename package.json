@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^1.1.0",
     "canvas": "^2.8.0",
     "ffprobe-client": "^1.1.6",
