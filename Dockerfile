@@ -1,4 +1,5 @@
 FROM node:14-buster
+LABEL org.opencontainers.image.source="https://github.com/kc1r74p/autorender"
 
 RUN apt-get update && \
     apt-get install -y ffmpeg && \
