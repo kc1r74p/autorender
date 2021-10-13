@@ -7,11 +7,6 @@ on:
     paths-ignore:
       - 'README.md'
       - 'LICENSE.md'
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE.md'
     
 env:
   REGISTRY: ghcr.io
