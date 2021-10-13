@@ -45,3 +45,12 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          
+      - name: Cleanup previous registry version
+        uses:  kc1r74p/delete-package-versions@main
+        with:
+          owner: ${{ github.repository_owner }}
+          package-name: 'autorender'
+          package-type: 'container'
+          ignore-tag: 'main'
+          token: ${{ secrets.GITHUB_TOKEN }}
