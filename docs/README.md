@@ -1,7 +1,9 @@
 # Autorender
 ![Build app](https://github.com/kc1r74p/autorender/workflows/Build%20app/badge.svg)
+[![Docker](https://github.com/kc1r74p/autorender/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/kc1r74p/autorender/actions/workflows/docker-publish.yml)
 ![1](https://img.shields.io/david/kc1r74p/autorender)
 ![2](https://img.shields.io/github/languages/code-size/kc1r74p/autorender)
+
 
 https://user-images.githubusercontent.com/7422353/119197643-5dfb4900-ba88-11eb-9579-da7cfbaeda07.mp4
 
