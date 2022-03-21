@@ -15,7 +15,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^1.4.1",
-    "canvas": "^2.9.0",
+    "canvas": "^2.9.1",
     "ffprobe-client": "^1.1.6",
     "fluent-ffmpeg": "^2.1.2",
     "gopro-telemetry": "^1.1.37",
