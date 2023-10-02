@@ -21,7 +21,7 @@
     "gopro-telemetry": "^1.2.1",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
-    "typescript": "^5.0.4",
+    "typescript": "^5.2.2",
     "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
