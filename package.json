@@ -28,7 +28,7 @@
     "@types/fluent-ffmpeg": "^2.1.20",
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.30",
-    "@types/node": "^20.11.19",
+    "@types/node": "^20.12.8",
     "@types/tz-lookup": "^6.1.0"
   }
 }
