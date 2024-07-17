@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:lts-slim
 LABEL org.opencontainers.image.source="https://github.com/kc1r74p/autorender"
 
 RUN apt-get update && \
