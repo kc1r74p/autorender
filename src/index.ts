@@ -40,7 +40,7 @@ const extractGPMFAt = async (videoFile: any, stream: number) => {
             .on('data', (chunk) => {
                 rawData = Buffer.concat([rawData, chunk]);
             })
-            .on('end', async () => {await sleep(100); return resolve({})});
+            .on('end', async () => { await sleep(100); return resolve({}) });
     });
     return rawData;
 };
@@ -362,7 +362,10 @@ async function asyncForEach(array: any, callback: any) {
 }
 
 async function renderOverlayedPart(inDir: string, outDir: string, file: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        const [raw, ffData]: any = await extractGPMF(inDir + file);
+        const formattedLength = moment.utc(ffData.format.duration*1000);
+
         // for testing add .addOption('-t 5') which will return a 5s video instead of whole duration
         const render = ffmpeg(inDir + file)
             .addInput(outDir + file + '/%04d.png')
@@ -377,12 +380,13 @@ async function renderOverlayedPart(inDir: string, outDir: string, file: string) 
             .on('end', resolve)
             .on('error', reject)
             .on('progress', (progress: { timemark: moment.MomentInput; }) => {
-                const tm = moment(progress.timemark, 'HH:mm:ss.SS').valueOf();
-                if (Math.round(tm / 100) % 10 === 0) {
-                    console.log(file + '] Processing: ' + progress.timemark);
+                const prog = moment(progress.timemark, 'HH:mm:ss.SS');
+                if (Math.round(prog.valueOf() / 100) % 10 === 0) {
+                    console.log(file + '] Processing: ' + prog.format("HH:mm:ss") + '/' + formattedLength.format("HH:mm:ss"));
                 }
-            })
-            .output(outDir + 'rendered_' + file);
+            }) 
+            //.withVideoCodec('h264_nvenc') // <- needs more settings for quality, at least will use GPU
+            .output(outDir + 'rendered_' + file)
         render.run();
     });
 }
@@ -394,6 +398,7 @@ async function concatVideos(inDir: string, outDir: string, files: string[], date
         files.shift();
         files.forEach((f) => render.addInput(inDir + f));
         render.addOption('-safe 0')
+            // .withVideoCodec('h264_nvenc') // <- needs more settings for quality, at least will use GPU
             .on('end', resolve)
             .on('error', reject)
             .on('progress', (progress) => {
@@ -403,13 +408,13 @@ async function concatVideos(inDir: string, outDir: string, files: string[], date
                 }
             });
 
-        render.mergeToFile(outDir + date.format('YYYYMMDD_HHmmss') + '.mp4');
+        render.mergeToFile(outDir + date.format('YYYYMMDD_HHmmss') + '.mp4', __dirname + '/out/');
     });
 }
 
 async function load() {
     const startTime = moment();
-    console.log('START: ' + startTime.toISOString());
+    console.log('START Current time: ' + startTime.toISOString());
 
     const inDir = __dirname + '/in/';
     const outDir = __dirname + '/out/';
