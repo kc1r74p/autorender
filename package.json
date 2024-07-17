@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
-    "@ffprobe-installer/ffprobe": "^1.4.1",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "canvas": "^2.11.2",
     "ffprobe-client": "^1.1.6",
     "fluent-ffmpeg": "^2.1.3",
