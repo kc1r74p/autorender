@@ -366,6 +366,9 @@ async function renderOverlayedPart(inDir: string, outDir: string, file: string) 
         const [raw, ffData]: any = await extractGPMF(inDir + file);
         const formattedLength = moment.utc(ffData.format.duration*1000);
 
+        let nextStartTime = Date.now();
+        let avgTime : number = 1;
+
         // for testing add .addOption('-t 5') which will return a 5s video instead of whole duration
         const render = ffmpeg(inDir + file)
             .addInput(outDir + file + '/%04d.png')
@@ -381,8 +384,17 @@ async function renderOverlayedPart(inDir: string, outDir: string, file: string) 
             .on('error', reject)
             .on('progress', (progress: { timemark: moment.MomentInput; }) => {
                 const prog = moment(progress.timemark, 'HH:mm:ss.SS');
+                const currentProg = prog.diff(moment().startOf('day'), 'seconds');
+                const percentage = currentProg / ffData.format.duration;
+
+                if (Math.round(percentage) % 1 === 0) {
+                    const deltaTime = Number(Date.now()) - nextStartTime;
+                    avgTime = deltaTime + avgTime / 2;
+                    nextStartTime = Date.now();
+                }
                 if (Math.round(prog.valueOf() / 100) % 10 === 0) {
-                    console.log(file + '] Processing: ' + prog.format("HH:mm:ss") + '/' + formattedLength.format("HH:mm:ss"));
+                    const eta = ((ffData.format.duration - currentProg) * avgTime) / 1000 / 60;
+                    console.log(file + '] Processing: ' + prog.format("HH:mm:ss") + '/' + formattedLength.format("HH:mm:ss") + ' - ETA: ' + eta.toFixed(2) + ' min (' + (percentage * 100).toFixed(0) + '%)');
                 }
             }) 
             //.withVideoCodec('h264_nvenc') // <- needs more settings for quality, at least will use GPU
@@ -425,6 +437,12 @@ async function load() {
     await readdir(inDir, async (err: any, files: any[]) => {
         console.log('All files: ' + files.join(','));
         let fileArr = files.filter((x) => x.toLowerCase().includes('.mp4'));
+
+        if(fileArr.length < 1){
+            console.error('Error: No *.mp4 files found in ' + inDir);
+            process.exit(1);
+        }
+
         console.log('Files for one track: ' + fileArr.join(','));
 
         // collect track metadata over all files
